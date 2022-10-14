@@ -1,1 +1,1 @@
-# WDGM
+# Repozytorium z Wprowadzenia Do Grafiki Maszynowej
