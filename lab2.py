@@ -16,36 +16,23 @@ class BaseImage:
     data: np.ndarray  # tensor przechowujacy piksele obrazu
     color_model: ColorModel  # atrybut przechowujacy biezacy model barw obrazu
 
-    def __init__(self, path: str) -> None:
-        """
-        inicjalizator wczytujacy obraz do atrybutu data na podstawie sciezki
-        """
+    def __init__(self, path: str, colorModel: ColorModel) -> None:
         self.data = imread(path)
-        self.color_model = color_model
+        self.color_model = colorModel
 
     def save_img(self, path: str) -> None:
-        """
-        metoda zapisujaca obraz znajdujacy sie w atrybucie data do pliku
-        """
-        imsave('image.jpg', self.data)
+        imsave(path, self.data)
 
     def show_img(self) -> None:
-        """
-        metoda wyswietlajaca obraz znajdujacy sie w atrybucie data
-        """
         imshow(self.data)
 
     def get_layer(self, layer_id: int) -> 'BaseImage':
-        """
-        metoda zwracajaca warstwe o wskazanym indeksie
-        """
         return self.data[:, :, layer_id]
 
+    def get_layers(self) -> []:
+        return np.squeeze(np.dsplit(self.data, self.data.shape[-1]))
+
     def to_hsv(self) -> 'BaseImage':
-        """
-        metoda dokonujaca konwersji obrazu w atrybucie data do modelu hsv
-        metoda zwraca nowy obiekt klasy image zawierajacy obraz w docelowym modelu barw
-        """
         for i in self.data:
             for col in i:
                 red, green, blue = col[0], col[1], col[2]
@@ -54,7 +41,7 @@ class BaseImage:
                 m = min(red, green, blue)
 
                 V = M / 255
-                if(M > 0):
+                if (M > 0):
                     S = 1 - (m / M)
                 else:
                     S = 0
@@ -62,15 +49,15 @@ class BaseImage:
                 zm = (red ** 2 + green ** 2 + blue ** 2) - (red * green - red * blue - green * blue)
 
                 if green >= blue:
-                    H = np.cos((red - green/2-blue/2) / np.sqrt(zm)) ** (-1)
+                    H = np.cos((red - green / 2 - blue / 2) / np.sqrt(zm)) ** (-1)
                 else:
-                    H = 360 - np.cos((red - green/2-blue/2) / np.sqrt(zm)) ** (-1)
+                    H = 360 - np.cos((red - green / 2 - blue / 2) / np.sqrt(zm)) ** (-1)
 
                 col[0] = H * 255
                 col[1] = S * 255
                 col[2] = V * 255
 
-        self.colorModel = ColorModel.hsv
+        self.color_model = ColorModel.hsv
         return self
 
     def to_hsi(self) -> 'BaseImage':
@@ -85,7 +72,7 @@ class BaseImage:
                 M = max(red, green, blue)
                 m = min(red, green, blue)
                 I = (red + green + blue) / 3
-                if(M > 0):
+                if M > 0:
                     S = 1 - (m / M)
                 else:
                     S = 0
@@ -93,27 +80,50 @@ class BaseImage:
                 zm = (red ** 2 + green ** 2 + blue ** 2) - (red * green - red * blue - green * blue)
 
                 if green >= blue:
-                    H = np.cos((red - green/2-blue/2) / np.sqrt(zm)) ** (-1)
+                    H = np.cos((red - green / 2 - blue / 2) / np.sqrt(zm)) ** (-1)
                 else:
-                    H = 360 - np.cos((red - green/2-blue/2) / np.sqrt(zm)) ** (-1)
+                    H = 360 - np.cos((red - green / 2 - blue / 2) / np.sqrt(zm)) ** (-1)
 
                 col[0] = H * 150
                 col[1] = S * 150
                 col[2] = I * 150
 
-        self.colorModel = ColorModel.hsv
+        self.color_model = ColorModel.hsv
         return self
 
     def to_hsl(self) -> 'BaseImage':
-        """
-        metoda dokonujaca konwersji obrazu w atrybucie data do modelu hsl
-        metoda zwraca nowy obiekt klasy image zawierajacy obraz w docelowym modelu barw
-        """
-        pass
+        red, green, blue = self.get_layers()
+        M = np.max([red, green, blue], axis=0)
+        m = np.min([red, green.blue], axis=0)
+        d = (M - m) / 255
+        L = ((M + m) / 2) / 255
+        if L > 0:
+            S = d / (1 - np.absolute((2 * L) - 1))
+        else:
+            S = 0
+        if green >= blue:
+            H = np.cos(red - green / 2 - blue / 2) / (np.sqrt(red ** 2 + green ** 2 +
+                                                              blue ** 2 - red * green -
+                                                              red * blue - green * blue)) ** (-1)
+        self.color_model = ColorModel.hsl
+        return self
 
     def to_rgb(self) -> 'BaseImage':
-        """
-        metoda dokonujaca konwersji obrazu w atrybucie data do modelu rgb
-        metoda zwraca nowy obiekt klasy image zawierajacy obraz w docelowym modelu barw
-        """
-        pass
+        H, S, V = self.get_layers()
+        M = 255 * V
+        m = M * (1 - S)
+        z = (M - m) * (1 - np.absolute(((H / 60) % 2) - 1))
+
+        red = np.where(H < 60, M,
+                       np.where(H < 120, z + m,
+                                np.where(H < 240, m,
+                                         np.where(H < 300, z + m, M))))
+
+        green = np.where(H < 60, z + m,
+                         np.where(H < 240, M, m))
+
+        blue = np.where(H < 120, m,
+                        np.where(H < 240, z + m,
+                                 np.where(H < 300, M, z + m)))
+        self.color_model = ColorModel.rgb
+        return self
