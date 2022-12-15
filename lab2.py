@@ -16,9 +16,9 @@ class BaseImage:
     data: np.ndarray  # tensor przechowujacy piksele obrazu
     color_model: ColorModel  # atrybut przechowujacy biezacy model barw obrazu
 
-    def __init__(self, path: str, colorModel: ColorModel) -> None:
+    def __init__(self, path: str, color_model: ColorModel) -> None:
         self.data = imread(path)
-        self.color_model = colorModel
+        self.color_model = color_model
 
     def save_img(self, path: str) -> None:
         imsave(path, self.data)
