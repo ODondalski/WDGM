@@ -1,3 +1,60 @@
+
+
+# from ipywidgets import interact
+
+# def test_print(first: int, second: str) -> None:
+
+#   print(f'First param: {first}, second param: {second}')
+
+# interact(test_print, first=range(1, 11), second=['one', 'two'])
+
+# WARTOŚCI UŻYTE W LABIE DLA LENY
+
+#p = 30	p = 70	p = 127	p = 170	p = 220# PRZY P70 JUŻ SIĘ COŚ DZIEJE, 127 NAJLEPSZE
+
+#def otsus_threshold(image):
+
+    # Convert image to grayscale
+
+    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+   #     _, thresholded = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+
+    
+
+    #return thresholded
+
+    
+
+    #image = cv2.imread("path/to/image.jpg")
+
+#thresholded_image = otsus_threshold(image)
+
+#def brighten(self, value: int) -> None:
+
+#        self.data += value
+
+#DO MOJEJ METODY
+
+#thresholded_image = aligned_image.threshold(128)
+
+#Z DOKUMENTACJI OPENCV
+
+#Syntax:
+
+#cv2.line(image, start_point, end_point, color, thickness) 
+
+#Parameters: image: It is the image on which line is to be drawn. 
+
+#start_point: It is the starting coordinates of the line. The coordinates are represented as tuples of two values i.e. (X coordinate value, Y coordinate value). 
+
+#end_point: It is the ending coordinates of the line. The coordinates are represented as tuples of two values i.e. (X coordinate value, Y coordinate value). 
+
+#color: It is the color of the line to be drawn. For RGB, we pass a tuple. eg: (255, 0, 0) for blue color.
+
+#thickness: It is the thickness of the line in px. 
+
+#Return Value: It returns an image.
 from typing import Any
 import matplotlib
 from matplotlib.image import imread
