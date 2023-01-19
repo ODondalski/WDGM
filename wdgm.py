@@ -1,4 +1,17 @@
+/*1. (5 pkt) Pod adresem https://krzywicki.pro/wp-content/uploads/2023/01/sudoku.jpg znajduje się obraz przedstawiający sudoku.
+Przetworzyć obraz do takiej postaci, aby jak największy obszar tła pokryty był jednakową białą barwą bez utraty cyfr oraz "kratek" sudoku.
 
+Punktacja:
+- 1 pkt za ok. 60% białego tła
+- 2 pkt za ok. 70% białego tła
+- 3 pkt za ok. 80% białego tła
+- 4 pkt za ok. 90% białego tła
+- 5 pkt za ok. 100% białego tła
+
+2. (5 pkt) Wynikowy obraz z zadania 1. zmodyfikować w taki sposób, aby "kratki" sudoku były zaznaczone kolorem czerwonym.
+
+Rozwiązanie w postaci kodu biblioteki, kodu rozwiązania oraz wynikowego obrazu przesłać w zadaniu "Koło" na kanale przedmiotu.
+W rozwiązaniu proszę nie umieszczać środowiska wirtualnego (katalogu venv)!*/
 
 # from ipywidgets import interact
 
