@@ -1,51 +1,95 @@
-/*1. (5 pkt) Pod adresem https://krzywicki.pro/wp-content/uploads/2023/01/sudoku.jpg znajduje się obraz przedstawiający sudoku.
-Przetworzyć obraz do takiej postaci, aby jak największy obszar tła pokryty był jednakową białą barwą bez utraty cyfr oraz "kratek" sudoku.
+"""
+lena_gray = cv2.imread('../data/lena.jpg', cv2.IMREAD_GRAYSCALE)
+_, thresh_otsu = cv2.threshold(
 
-Punktacja:
-- 1 pkt za ok. 60% białego tła
-- 2 pkt za ok. 70% białego tła
-- 3 pkt za ok. 80% białego tła
-- 4 pkt za ok. 90% białego tła
-- 5 pkt za ok. 100% białego tła
+    lena_gray,
 
-2. (5 pkt) Wynikowy obraz z zadania 1. zmodyfikować w taki sposób, aby "kratki" sudoku były zaznaczone kolorem czerwonym.
+    thresh=0,
 
-Rozwiązanie w postaci kodu biblioteki, kodu rozwiązania oraz wynikowego obrazu przesłać w zadaniu "Koło" na kanale przedmiotu.
+    maxval=255,
 
-am: {first}, second param: {second}')
+    type=cv2.THRESH_BINARY + cv2.THRESH_OTSU
 
-# interact(test_print, first=range(1, 11), second=['one', 'two'])
+)
 
-# WARTOŚCI UŻYTE W LABIE DLA LENY
+plt.imshow(thresh_otsu, cmap='gray')
+th_adaptive = cv2.adaptiveThreshold(
 
-#p = 30	p = 70	p = 127	p = 170	p = 220# PRZY P70 JUŻ SIĘ COŚ DZIEJE, 127 NAJLEPSZE
+    lena_gray,
 
-#def otsus_threshold(image):
+    maxValue=255,
 
-    # Convert image to grayscale
+    adaptiveMethod=cv2.ADAPTIVE_THRESH_MEAN_C,
 
-    #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    thresholdType=cv2.THRESH_BINARY,
 
-   #     _, thresholded = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    blockSize=13,
 
-    
+    C=8
 
-    
+)
 
-    
+plt.imshow(th_adaptive, cmap='gray')
+canny_edges = cv2.Canny(lena_gray,16,40,3)
+lines_edges = cv2.Canny(lines_thresh, 20, 50, 3)
 
-    #image = cv2.imread("path/to/image.jpg")
+plt.imshow(lines_edges, cmap='gray')
+lines = cv2.HoughLinesP(
 
-#thresholded_image = otsus_threshold(image)
+    lines_edges,
 
-#def brighten(self, value: int) -> None:
+    2,
 
-#        self.data += value
+    np.pi / 180,
 
-#DO MOJEJ METODY
+    30
 
+)
 
+result_lines_img = cv2.cvtColor(lines_img, cv2.COLOR_GRAY2RGB)
 
+for line in lines:
+
+  x0, y0, x1, y1 = line[0]
+
+  cv2.line(result_lines_img, (x0, y0), (x1, y1), (0, 255, 0), 5)
+
+plt.imshow(result_lines_img)
+
+okręgi 
+
+checkers_img = cv2.imread('checkers.png')
+
+checkers_gray = cv2.cvtColor(checkers_img, cv2.COLOR_BGR2GRAY)
+
+checkers_color = cv2.cvtColor(checkers_img, cv2.COLOR_BGR2RGB)
+
+circles = cv2.HoughCircles(
+
+    checkers_gray,
+
+    method=cv2.HOUGH_GRADIENT,
+
+    dp=2,
+
+    minDist=60,
+
+    minRadius=20,
+
+    maxRadius=100
+
+)
+
+len(circles[0])
+
+24
+
+for (x, y, r) in circles.astype(int)[0]:
+
+  cv2.circle(checkers_color, (x, y), r, (0, 255, 0), 4)
+
+plt.imshow(checkers_color)
+"""
 from typing import Any
 import matplotlib
 from matplotlib.image import imread
