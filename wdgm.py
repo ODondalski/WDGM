@@ -89,6 +89,62 @@ for (x, y, r) in circles.astype(int)[0]:
   cv2.circle(checkers_color, (x, y), r, (0, 255, 0), 4)
 
 plt.imshow(checkers_color)
+--------------------------------------------------
+lake_color = cv2.imread('swiecajty.jpg', cv2.IMREAD_COLOR)
+
+lake_gray = cv2.cvtColor(lake_color, cv2.COLOR_BGR2GRAY)
+
+clahe = cv2.createCLAHE(
+
+    clipLimit=2.0,
+
+    tileGridSize=(4, 4)
+
+)
+
+equalized_lake_gray = clahe.apply(lake_gray)
+
+plt.subplot(221)
+
+plt.imshow(lake_gray, cmap='gray')
+
+plt.subplot(222)
+
+plt.hist(lake_gray.ravel(), bins=256, range=(0, 256), color='gray')
+
+plt.subplot(223)
+
+plt.imshow(equalized_lake_gray, cmap='gray')
+
+plt.subplot(224)
+
+plt.hist(equalized_lake_gray.ravel(), bins=256, range=(0, 256), color='gray')
+
+plt.show()
+--------------------------------------------
+lake_rgb = cv2.cvtColor(lake_color, cv2.COLOR_BGR2RGB)
+lake_lab = cv2.cvtColor(lake_color, cv2.COLOR_BGR2LAB)
+
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+lake_lab[..., 0] = clahe.apply(lake_lab[..., 0])
+lake_color_equalized = cv2.cvtColor(lake_lab, cv2.COLOR_LAB2RGB)
+plt.subplot(221)
+plt.imshow(lake_rgb)
+
+plt.subplot(222)
+plt.hist(lake_rgb[..., 0].ravel(), bins=256, range=(0, 256), color='b')
+plt.hist(lake_rgb[..., 1].ravel(), bins=256, range=(0, 256), color='g')
+plt.hist(lake_rgb[..., 2].ravel(), bins=256, range=(0, 256), color='r')
+
+plt.subplot(223)
+plt.imshow(lake_color_equalized)
+
+plt.subplot(224)
+plt.hist(lake_color_equalized[..., 0].ravel(), bins=256, range=(0, 256), color='b')
+plt.hist(lake_color_equalized[..., 1].ravel(), bins=256, range=(0, 256), color='g')
+plt.hist(lake_color_equalized[..., 2].ravel(), bins=256, range=(0, 256), color='r')
+
+plt.show()
 """
 from typing import Any
 import matplotlib
